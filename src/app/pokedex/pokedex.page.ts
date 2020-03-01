@@ -45,7 +45,7 @@ export class PokedexPage implements OnInit {
   }
 
   onDetails(id) {
-    this.router.navigate([`/tabs/pokemon-details/${id}`]);
+    this.router.navigate([`/tabs/pokedex/${id}`]);
   }
 
   getPokemonItem(id) {

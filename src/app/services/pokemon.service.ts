@@ -32,8 +32,6 @@ export class PokemonService {
                           response['results'][i].id = parseInt(urlparts.pop());
                       }
 
-
-
                       return response['results'];
                   }
               )
@@ -42,6 +40,33 @@ export class PokemonService {
 
   getPokemon(id): Observable<Pokemon> {
       return this.http.get<Pokemon>(`${this.url}/pokemon/${id}`);
+  }
+
+  getRandomPokemon(): Observable<Pokemon> {
+      let offset = Math.round(Math.random() * 963);
+
+      return new Observable<Pokemon>(subscriber => {
+          this.http.get<Pokemon[]>(`${this.url}/pokemon?offset=${offset}&limit=1`).subscribe(response => {
+              let result = response['results'][0];
+
+              let url = result.url.trim();
+
+              if (url.charAt(url.length - 1) == '/') {
+                  url = url.substr(0, url.length - 1);
+              }
+
+              let urlparts = url.split('/');
+
+              result.id = parseInt(urlparts.pop());
+
+              this.getPokemon(result.id).subscribe(
+                  pokemon => subscriber.next(pokemon),
+                  error => subscriber.error(error),
+                  () => subscriber.complete()
+              );
+          },
+              error => subscriber.error(error));
+      });
   }
 
   getPokemonImage(id): string {

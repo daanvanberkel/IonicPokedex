@@ -3,6 +3,9 @@ import {DOCUMENT} from '@angular/common';
 import {environment} from '../../environments/environment';
 import {CallbackID, Network, Plugins} from '@capacitor/core';
 import {} from 'googlemaps';
+import {PokemonService} from '../services/pokemon.service';
+import {Pokemon} from '../models/pokemon';
+import {Router} from '@angular/router';
 
 const {Geolocation} = Plugins;
 
@@ -22,10 +25,13 @@ export class PokemonMapPage implements OnInit {
   private networkHandler = null;
   private apiKey = environment.google_maps_key;
   private callbackId: CallbackID;
+  private pokemonMarkers: google.maps.Marker[] = [];
 
   constructor(
       private renderer: Renderer2,
-      @Inject(DOCUMENT) private document
+      @Inject(DOCUMENT) private document,
+      private pokemonService: PokemonService,
+      private router: Router
   ) { }
 
   ngOnInit() {
@@ -112,7 +118,7 @@ export class PokemonMapPage implements OnInit {
 
       let script = this.renderer.createElement('script');
       script.id = 'googleMaps';
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=mapInit`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=mapInit&libraries=geometry`;
 
       this.renderer.appendChild(this.document.body, script);
     });
@@ -125,6 +131,7 @@ export class PokemonMapPage implements OnInit {
         center: this.initialPosition,
         disableDefaultUI: true,
         clickableIcons: false,
+        gestureHandling: 'none',
         styles: [
           {
             "featureType": "poi",
@@ -165,8 +172,8 @@ export class PokemonMapPage implements OnInit {
         let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
         this.userMarker.setPosition(latLng);
-
-        this.map.setZoom(15);
+        this.generateRandomPokemonAroundUser();
+        this.map.setZoom(16);
         this.map.panTo(latLng);
       }
     }));
@@ -177,5 +184,53 @@ export class PokemonMapPage implements OnInit {
       Geolocation.clearWatch({id: this.callbackId}).then(() => {
       });
     }
+  }
+
+  private generateRandomPokemonAroundUser() {
+    let markersInView = this.getPokemonMarkersInView();
+    let markersToAdd = 10 - markersInView.length;
+
+    for (let i = 0; i < markersToAdd; i++) {
+      let heading = (i * 36);
+      let distance = Math.round(Math.random() * 400) + 100;
+
+      let latlng = google.maps.geometry.spherical.computeOffset(this.userMarker.getPosition(), distance, heading);
+
+      let marker = new google.maps.Marker({
+        position: latlng,
+        map: this.map
+      });
+
+      this.pokemonMarkers.push(marker);
+
+      this.pokemonService.getRandomPokemon().subscribe(pokemon => {
+        marker.setIcon({
+          url: this.pokemonService.getPokemonImage(pokemon.id),
+          scaledSize: new google.maps.Size(50, 50),
+          anchor: new google.maps.Point(25, 25)
+        });
+
+        marker.addListener('click', () => {
+          this.catchPokemon(pokemon);
+        });
+      });
+    }
+  }
+
+  private getPokemonMarkersInView(): google.maps.Marker[] {
+    let markers = [];
+    let bounds = this.map.getBounds();
+
+    for(let marker of this.pokemonMarkers) {
+      if (bounds.contains(marker.getPosition())) {
+        markers.push(marker);
+      }
+    }
+
+    return markers;
+  }
+
+  private catchPokemon(pokemon: Pokemon) {
+    this.router.navigate(['/tabs/map/catch-pokemon/', pokemon.id]);
   }
 }

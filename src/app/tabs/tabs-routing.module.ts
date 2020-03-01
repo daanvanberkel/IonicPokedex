@@ -12,8 +12,11 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () =>
-              import('../pokemon-map/pokemon-map.module').then(m => m.PokemonMapPageModule)
+            loadChildren: () => import('../pokemon-map/pokemon-map.module').then(m => m.PokemonMapPageModule)
+          },
+          {
+            path: 'catch-pokemon/:id',
+            loadChildren: () => import('../catch-pokemon/catch-pokemon.module').then( m => m.CatchPokemonPageModule)
           }
         ]
       },
@@ -22,8 +25,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () =>
-                import('../my-pokemon/my-pokemon.module').then(m => m.MyPokemonPageModule)
+            loadChildren: () => import('../my-pokemon/my-pokemon.module').then(m => m.MyPokemonPageModule)
           }
         ]
       },
@@ -32,8 +34,11 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () =>
-                import('../pokedex/pokedex.module').then(m => m.PokedexPageModule)
+            loadChildren: () => import('../pokedex/pokedex.module').then(m => m.PokedexPageModule)
+          },
+          {
+            path: ':id',
+            loadChildren: () => import('../pokemon-details/pokemon-details.module').then( m => m.PokemonDetailsPageModule)
           }
         ]
       },
@@ -42,18 +47,9 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () =>
-                import('../settings/settings.module').then(m => m.SettingsPageModule)
+            loadChildren: () => import('../settings/settings.module').then(m => m.SettingsPageModule)
           }
         ]
-      },
-      {
-        path: 'pokemon-details/:id',
-        loadChildren: () => import('../pokemon-details/pokemon-details.module').then( m => m.PokemonDetailsPageModule)
-      },
-      {
-        path: 'catch-pokemon/:id',
-        loadChildren: () => import('../catch-pokemon/catch-pokemon.module').then( m => m.CatchPokemonPageModule)
       },
       {
         path: '',
