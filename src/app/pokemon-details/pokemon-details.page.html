@@ -1,9 +1,49 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Pokemon details</ion-title>
+    <ion-title *ngIf="pokemon">{{ pokemon.name | titlecase }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="pokemon">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
+  <ion-img [src]="getPokemonImage(pokemon.id)"></ion-img>
+
+  <ion-list lines="full">
+    <ion-list-header>
+      Abilities
+    </ion-list-header>
+
+    <ion-item *ngFor="let ability of pokemon.abilities">
+      <ion-label>
+        {{ ability.ability.name | titlecase }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list lines="full">
+    <ion-list-header>
+      Stats
+    </ion-list-header>
+
+    <ion-item *ngFor="let stat of pokemon.stats">
+      <ion-label>
+        {{ stat.stat.name | titlecase }} - {{ stat.base_stat }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list lines="full">
+    <ion-list-header>
+      Moves
+    </ion-list-header>
+
+    <ion-item *ngFor="let move of pokemon.moves">
+      <ion-label>
+        {{ move.move.name.replace('-', ' ') | titlecase }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

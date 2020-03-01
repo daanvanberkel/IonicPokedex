@@ -5,5 +5,19 @@
 </ion-header>
 
 <ion-content>
+  <ion-list lines="full">
+    <ion-item *ngFor="let pokemon of pokemons" (click)="onDetails(pokemon.id)">
+      <ion-avatar slot="start">
+        <ion-img [src]="getPokemonItem(pokemon.id)"></ion-img>
+      </ion-avatar>
+      <ion-label>{{ pokemon.name | titlecase }}</ion-label>
+    </ion-item>
+  </ion-list>
 
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+            loadingSpinner="bubbles"
+            loadingText="Meer pokemons laden...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
