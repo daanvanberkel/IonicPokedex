@@ -1,5 +1,5 @@
 {
-  "appId": "io.ionic.starter",
+  "appId": "nl.daanvanberkel.pokedex",
   "appName": "Pokedex",
   "bundledWebRuntime": false,
   "npmClient": "npm",
