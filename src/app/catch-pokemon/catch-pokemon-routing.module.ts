@@ -2,11 +2,15 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CatchPokemonPage } from './catch-pokemon.page';
+import {PokemonResolverService} from './pokemon-resolver.service';
 
 const routes: Routes = [
   {
     path: '',
-    component: CatchPokemonPage
+    component: CatchPokemonPage,
+    resolve: {
+      pokemon: PokemonResolverService
+    }
   }
 ];
 

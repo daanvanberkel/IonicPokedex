@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Pokemon} from '../models/pokemon';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-catch-pokemon',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CatchPokemonPage implements OnInit {
 
-  constructor() { }
+  pokemon: Pokemon;
+
+  constructor(
+      private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
+    this.route.data.subscribe(data => {
+      this.pokemon = data.pokemon;
+    });
   }
 
 }
