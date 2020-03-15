@@ -51,4 +51,15 @@ export class PokedexPage implements OnInit {
   getPokemonItem(id) {
     return this.pokemonService.getPokemonImage(id);
   }
+
+  doRefresh(event) {
+    this.page = 0;
+    this.allPokemonLoaded = false;
+    this.pokemons = [];
+
+    this.pokemonService.getPokemons(0, this.limit).subscribe(pokemons => {
+      this.pokemons = this.pokemons.concat(pokemons);
+      event.target.complete();
+    });
+  }
 }

@@ -5,6 +5,10 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <app-pokemon-list [pokemons]="pokemons" (pokemonClick)="onDetails($event.id)"></app-pokemon-list>
 
   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
