@@ -150,10 +150,7 @@ export class PokemonMapPage implements OnInit {
   }
 
   private followUser() {
-    console.log('Start following');
     this.callbackId = Geolocation.watchPosition({ enableHighAccuracy: true }, (position, err) => {
-      console.log('Pos:', position);
-      console.log('Err:', err);
       if (this.map) {
         if (!this.userMarker) {
           this.userMarker = new google.maps.Marker({
@@ -192,6 +189,9 @@ export class PokemonMapPage implements OnInit {
   private generateRandomPokemonAroundUser() {
     let markersInView = this.getPokemonMarkersInView();
     let markersToAdd = 10 - markersInView.length;
+
+    console.log("Markers in view:", markersInView);
+    console.log("Markers to add:", markersToAdd);
 
     for (let i = 0; i < markersToAdd; i++) {
       let heading = (i * 36);

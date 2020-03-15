@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Pokemon} from '../models/pokemon';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {PokemonService} from '../services/pokemon.service';
 import {MyPokemonService} from '../services/my-pokemon.service';
 import {HapticsImpactStyle, Plugins} from '@capacitor/core';
+import {ToastController} from '@ionic/angular';
 
 const { Haptics } = Plugins;
 
@@ -21,7 +22,9 @@ export class CatchPokemonPage implements OnInit {
   constructor(
       private route: ActivatedRoute,
       private pokemonService: PokemonService,
-      private myPokemonService: MyPokemonService
+      private myPokemonService: MyPokemonService,
+      private router: Router,
+      private toastController: ToastController
   ) { }
 
   ngOnInit() {
@@ -49,6 +52,16 @@ export class CatchPokemonPage implements OnInit {
       Haptics.impact({
         style: HapticsImpactStyle.Heavy
       });
+
+      this.toastController.create({
+        message: `Je hebt ${this.pokemon.name} gevangen!`,
+        duration: 5000
+      }).then(toast => {
+        toast.present();
+
+        this.router.navigate(['/tabs/map']);
+      });
+
       this.myPokemonService.addPokemon(this.pokemon).subscribe(() => {
         this.myPokemon = this.pokemon;
       });
