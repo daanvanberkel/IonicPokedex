@@ -211,9 +211,6 @@ export class PokemonMapPage implements OnInit {
     let markersInView = this.getPokemonMarkersInView();
     let markersToAdd = 10 - markersInView.length;
 
-    console.log("Markers in view:", markersInView);
-    console.log("Markers to add:", markersToAdd);
-
     for (let i = 0; i < markersToAdd; i++) {
       let heading = (i * 36);
       let distance = Math.round(Math.random() * 400) + 100;
@@ -258,7 +255,8 @@ export class PokemonMapPage implements OnInit {
     if (!this.userCircle.getBounds().contains(marker.getPosition())) {
       this.toastController.create({
         message: 'Loop dichter naar deze pokemon om te kunnen vangen!',
-        duration: 3000
+        duration: 3000,
+        color: 'warning'
       }).then(toast => toast.present());
     } else {
       this.router.navigate(['/tabs/map/catch-pokemon/', pokemon.id]);

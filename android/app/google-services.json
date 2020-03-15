@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "688776473405",
+    "firebase_url": "https://pokedex-ea2ee.firebaseio.com",
+    "project_id": "pokedex-ea2ee",
+    "storage_bucket": "pokedex-ea2ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:688776473405:android:3b9a219b0c59f4497ef354",
+        "android_client_info": {
+          "package_name": "nl.daanvanberkel.pokedex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "688776473405-adcqil150f3lvniu79iv0lnf5ok67hve.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDej9eqzouZURTlTPw2gc0jGUk0Dyjw9Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "688776473405-adcqil150f3lvniu79iv0lnf5ok67hve.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

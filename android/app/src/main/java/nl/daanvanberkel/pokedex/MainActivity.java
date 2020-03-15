@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package nl.daanvanberkel.pokedex;
 
 import android.os.Bundle;
 

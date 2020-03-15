@@ -114,4 +114,13 @@ export class MyPokemonService {
       }).catch(error => subscriber.error(error));
     });
   }
+
+  resetAllPokemon(): Observable<void> {
+    return new Observable<void>(subscriber => {
+      this.storage.remove(STORAGE_KEY).then(() => {
+        subscriber.next();
+        subscriber.complete();
+      }).catch(error => subscriber.error(error));
+    });
+  }
 }
