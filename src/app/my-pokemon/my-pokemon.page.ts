@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
 export class MyPokemonPage implements OnInit {
 
   myPokemon: Pokemon[];
+  reorder = false;
 
   constructor(
       private myPokemonService: MyPokemonService,
@@ -30,5 +31,9 @@ export class MyPokemonPage implements OnInit {
 
   loadMyPokemon() {
     this.myPokemonService.getPokemons().subscribe(pokemon => this.myPokemon = pokemon);
+  }
+
+  toggleReorder() {
+    this.reorder = !this.reorder;
   }
 }

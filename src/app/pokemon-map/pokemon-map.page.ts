@@ -92,6 +92,10 @@ export class PokemonMapPage implements OnInit {
               })
             }
 
+            this.toastController.create({
+              message: 'Om deze app te kunnen gebruiken is een internetverbinding nodig.',
+              color: 'danger'
+            }).then(toast => toast.present());
             reject('Not online');
           }
         }, err => {

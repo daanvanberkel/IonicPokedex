@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {PokemonService} from '../services/pokemon.service';
 import {Pokemon} from '../models/pokemon';
 import {Router} from '@angular/router';
+import {ToastController} from '@ionic/angular';
 
 @Component({
   selector: 'app-pokedex',
@@ -17,11 +18,16 @@ export class PokedexPage implements OnInit {
 
   constructor(
       private pokemonService: PokemonService,
-      private router: Router
+      private router: Router,
+      private toastController: ToastController
   ) { }
 
   ngOnInit() {
-    this.pokemonService.getPokemons(0, this.limit).subscribe(pokemons => this.pokemons = this.pokemons.concat(pokemons));
+
+  }
+
+  ionViewWillEnter() {
+    this.pokemonService.getPokemons(0, this.limit).subscribe(pokemons => this.pokemons = this.pokemons.concat(pokemons), error => this.handleError(error));
   }
 
   loadData(event) {
@@ -41,7 +47,7 @@ export class PokedexPage implements OnInit {
 
       this.pokemons = this.pokemons.concat(pokemons);
       event.target.complete();
-    });
+    }, error => this.handleError(error));
   }
 
   onDetails(id) {
@@ -60,6 +66,16 @@ export class PokedexPage implements OnInit {
     this.pokemonService.getPokemons(0, this.limit).subscribe(pokemons => {
       this.pokemons = this.pokemons.concat(pokemons);
       event.target.complete();
-    });
+    }, error => this.handleError(error));
+  }
+
+  handleError(error) {
+    if (error) {
+      this.toastController.create({
+        message: 'Er is een fout opgetreden tijdens het ophalen van de pokemon.',
+        duration: 5000,
+        color: 'danger'
+      }).then(toast => toast.present());
+    }
   }
 }

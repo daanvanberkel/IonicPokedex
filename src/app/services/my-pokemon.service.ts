@@ -80,10 +80,32 @@ export class MyPokemonService {
 
         for (let i = 0; i < result.length; i++) {
           if (result[i].id === id) {
-            result = result.splice(i, 1);
+            console.log(result[i]);
+             result.splice(i, 1);
             break;
           }
         }
+
+        this.storage.set(STORAGE_KEY, result).then(() => {
+          subscriber.next();
+          subscriber.complete()
+        }).catch(error => subscriber.error(error));
+      }).catch(error => subscriber.error(error));
+    });
+  }
+
+  reorderPokemon(oldPlace, newPlace): Observable<void> {
+    return new Observable<void>(subscriber => {
+      this.storage.get(STORAGE_KEY).then(result => {
+        if (!result) {
+          subscriber.next();
+          subscriber.complete();
+          return;
+        }
+
+        const pokemon = result[oldPlace];
+        result.splice(oldPlace,1);
+        result.splice(newPlace,0,pokemon);
 
         this.storage.set(STORAGE_KEY, result).then(() => {
           subscriber.next();

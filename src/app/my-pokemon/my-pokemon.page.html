@@ -1,9 +1,14 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Mijn Pokemon</ion-title>
+
+    <ion-buttons slot="primary">
+      <ion-button (click)="toggleReorder()" *ngIf="!reorder">Wijzigen</ion-button>
+      <ion-button (click)="toggleReorder()" *ngIf="reorder">Klaar</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="myPokemon">
-  <app-pokemon-list [pokemons]="myPokemon" (pokemonClick)="showDetails($event.id)"></app-pokemon-list>
+  <app-pokemon-list [pokemons]="myPokemon" [reorder]="reorder" [deletable]="true" (pokemonClick)="showDetails($event.id)"></app-pokemon-list>
 </ion-content>
