@@ -6,6 +6,7 @@ import {} from 'googlemaps';
 import {PokemonService} from '../services/pokemon.service';
 import {Pokemon} from '../models/pokemon';
 import {Router} from '@angular/router';
+import {ToastController} from '@ionic/angular';
 
 const {Geolocation} = Plugins;
 
@@ -21,6 +22,7 @@ export class PokemonMapPage implements OnInit {
   private initialPosition = {lat: 51.688640, lng: 5.287090};
   private map: google.maps.Map;
   private userMarker: google.maps.Marker;
+  private userCircle: google.maps.Circle;
   private mapsLoaded = false;
   private networkHandler = null;
   private apiKey = environment.google_maps_key;
@@ -31,7 +33,8 @@ export class PokemonMapPage implements OnInit {
       private renderer: Renderer2,
       @Inject(DOCUMENT) private document,
       private pokemonService: PokemonService,
-      private router: Router
+      private router: Router,
+      private toastController: ToastController
   ) { }
 
   ngOnInit() {
@@ -165,6 +168,19 @@ export class PokemonMapPage implements OnInit {
           });
         }
 
+        if (!this.userCircle) {
+          this.userCircle = new google.maps.Circle({
+            center: this.initialPosition,
+            strokeColor: '#0000FF',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#0000FF',
+            fillOpacity: 0.2,
+            map: this.map,
+            radius: 100
+          });
+        }
+
         if (!position) {
           return;
         }
@@ -172,6 +188,7 @@ export class PokemonMapPage implements OnInit {
         let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
         this.userMarker.setPosition(latLng);
+        this.userCircle.setCenter(latLng);
         this.generateRandomPokemonAroundUser();
         this.map.setZoom(16);
         this.map.panTo(latLng);
@@ -214,7 +231,7 @@ export class PokemonMapPage implements OnInit {
         });
 
         marker.addListener('click', () => {
-          this.catchPokemon(pokemon);
+          this.catchPokemon(marker, pokemon);
         });
       });
     }
@@ -233,7 +250,17 @@ export class PokemonMapPage implements OnInit {
     return markers;
   }
 
-  private catchPokemon(pokemon: Pokemon) {
-    this.router.navigate(['/tabs/map/catch-pokemon/', pokemon.id]);
+  private catchPokemon(marker: google.maps.Marker, pokemon: Pokemon) {
+    if (!this.userCircle.getBounds().contains(marker.getPosition())) {
+      this.toastController.create({
+        message: 'Loop dichter naar deze pokemon om te kunnen vangen!',
+        duration: 3000
+      }).then(toast => toast.present());
+    } else {
+      this.router.navigate(['/tabs/map/catch-pokemon/', pokemon.id]);
+      marker.setMap(null);
+
+      this.pokemonMarkers.splice(this.pokemonMarkers.indexOf(marker), 1);
+    }
   }
 }
