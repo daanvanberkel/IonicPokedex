@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>
-  <app-pokemon-list [pokemons]="pokemons" (click)="onDetails($event.id)"></app-pokemon-list>
+  <app-pokemon-list [pokemons]="pokemons" (pokemonClick)="onDetails($event.id)"></app-pokemon-list>
 
   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
     <ion-infinite-scroll-content

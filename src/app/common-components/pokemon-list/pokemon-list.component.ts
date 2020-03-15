@@ -10,7 +10,7 @@ import {PokemonService} from '../../services/pokemon.service';
 export class PokemonListComponent implements OnInit {
 
   @Input() pokemons: Pokemon[];
-  @Output() click = new EventEmitter<Pokemon>();
+  @Output() pokemonClick = new EventEmitter<Pokemon>();
 
   constructor(
       private pokemonService: PokemonService
@@ -19,7 +19,7 @@ export class PokemonListComponent implements OnInit {
   ngOnInit() {}
 
   onClick(pokemon) {
-    this.click.emit(pokemon);
+    this.pokemonClick.emit(pokemon);
   }
 
   getPokemonImage(pokemon): string {

@@ -26,6 +26,10 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () => import('../my-pokemon/my-pokemon.module').then(m => m.MyPokemonPageModule)
+          },
+          {
+            path: ':id',
+            loadChildren: () => import('../pokemon-details/pokemon-details.module').then(m => m.PokemonDetailsPageModule)
           }
         ]
       },

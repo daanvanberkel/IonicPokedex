@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MyPokemonService} from '../services/my-pokemon.service';
 import {Pokemon} from '../models/pokemon';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-my-pokemon',
@@ -12,7 +13,8 @@ export class MyPokemonPage implements OnInit {
   myPokemon: Pokemon[];
 
   constructor(
-      private myPokemonService: MyPokemonService
+      private myPokemonService: MyPokemonService,
+      private router: Router
   ) { }
 
   ngOnInit() {
@@ -20,6 +22,10 @@ export class MyPokemonPage implements OnInit {
 
   ionViewWillEnter() {
     this.loadMyPokemon();
+  }
+
+  showDetails(pokemonId) {
+    this.router.navigate(['/tabs/my-pokemon', pokemonId]);
   }
 
   loadMyPokemon() {
