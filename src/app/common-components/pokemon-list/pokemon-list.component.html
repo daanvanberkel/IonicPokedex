@@ -1,0 +1,8 @@
+<ion-list lines="full" *ngIf="pokemons">
+  <ion-item *ngFor="let pokemon of pokemons" (click)="onClick(pokemon)">
+    <ion-avatar slot="start">
+      <ion-img [src]="getPokemonImage(pokemon)"></ion-img>
+    </ion-avatar>
+    <ion-label>{{ pokemon.name | titlecase }}</ion-label>
+  </ion-item>
+</ion-list>

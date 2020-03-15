@@ -9,5 +9,18 @@
 </ion-header>
 
 <ion-content>
+  <ion-card>
+    <ion-img [src]="getImgUrl()"></ion-img>
 
+    <ion-card-header>
+      <ion-card-title>{{ pokemon.name | titlecase }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p *ngIf="error">{{ error }}</p>
+
+      <ion-button expand="block" *ngIf="!myPokemon" (click)="catchPokemon()">{{ pokemon.name | titlecase }} vangen!</ion-button>
+      <p *ngIf="myPokemon">Deze pokemon heb je gevangen!</p>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

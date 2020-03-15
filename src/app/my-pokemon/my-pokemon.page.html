@@ -4,6 +4,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content *ngIf="myPokemon">
+  <ion-list lines="full">
+    <ion-item *ngFor="let pokemon of myPokemon">
+      <ion-label>
+        {{ pokemon.name | titlecase }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

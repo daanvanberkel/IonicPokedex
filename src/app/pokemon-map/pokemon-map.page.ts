@@ -150,7 +150,10 @@ export class PokemonMapPage implements OnInit {
   }
 
   private followUser() {
-    this.callbackId = Geolocation.watchPosition({}, ((position, err) => {
+    console.log('Start following');
+    this.callbackId = Geolocation.watchPosition({ enableHighAccuracy: true }, (position, err) => {
+      console.log('Pos:', position);
+      console.log('Err:', err);
       if (this.map) {
         if (!this.userMarker) {
           this.userMarker = new google.maps.Marker({
@@ -176,7 +179,7 @@ export class PokemonMapPage implements OnInit {
         this.map.setZoom(16);
         this.map.panTo(latLng);
       }
-    }));
+    });
   }
 
   private stopFollowingUser() {
