@@ -28,6 +28,7 @@ export class PokemonMapPage implements OnInit {
   private apiKey = environment.google_maps_key;
   private callbackId: CallbackID;
   private pokemonMarkers: google.maps.Marker[] = [];
+  private firstPokemon = true;
 
   constructor(
       private renderer: Renderer2,
@@ -193,7 +194,18 @@ export class PokemonMapPage implements OnInit {
 
         this.userMarker.setPosition(latLng);
         this.userCircle.setCenter(latLng);
-        this.generateRandomPokemonAroundUser();
+
+        if (this.firstPokemon) {
+          this.firstPokemon = false;
+
+          let pokemonLatlng = google.maps.geometry.spherical.computeOffset(this.userMarker.getPosition(), 75, 32);
+          this.generatePokemonMarker(pokemonLatlng).then(() => {
+            this.generateRandomPokemonAroundUser();
+          });
+        } else {
+          this.generateRandomPokemonAroundUser();
+        }
+
         this.map.setZoom(16);
         this.map.panTo(latLng);
       }
@@ -217,6 +229,12 @@ export class PokemonMapPage implements OnInit {
 
       let latlng = google.maps.geometry.spherical.computeOffset(this.userMarker.getPosition(), distance, heading);
 
+      this.generatePokemonMarker(latlng);
+    }
+  }
+
+  private generatePokemonMarker(latlng): Promise<void> {
+    return new Promise((resolve, reject) => {
       let marker = new google.maps.Marker({
         position: latlng,
         map: this.map
@@ -234,8 +252,10 @@ export class PokemonMapPage implements OnInit {
         marker.addListener('click', () => {
           this.catchPokemon(marker, pokemon);
         });
+
+        resolve();
       });
-    }
+    });
   }
 
   private getPokemonMarkersInView(): google.maps.Marker[] {
